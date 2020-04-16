@@ -4,7 +4,7 @@ const port= process.env.PORT || 3000
 const server= http.createServer(app)
 const io = require('socket.io')(server)
 
-let Data = [
+let data = [
     {
         "id":1,
         "question": "Lampu apa yang kalo dipecahkan akan keluar orang?",
@@ -221,7 +221,11 @@ io.on('connection', function(socket) {
         console.log('User Disconnected')
     })
 
-    io.emit('')
+    setTimeout(function() {
+        for(let i = 0; i < data.length; i++) {
+            io.emit('send-data',data[i])
+        }
+    },10000)
     
 })
 
