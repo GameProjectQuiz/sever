@@ -3,6 +3,7 @@ const http= require('http')
 const port= process.env.PORT || 3000
 const server= http.createServer(app)
 const io = require('socket.io')(server)
+let player = []
 
 let data = [
     {
@@ -216,6 +217,11 @@ let data = [
 
 io.on('connection', function(socket) {
     console.log('User Connected')
+
+    socket.on('user-connect', (user) => {
+        player.push(user)
+        console.log(player)
+    })
 
     socket.on('disconnect', function() {
         console.log('User Disconnected')
