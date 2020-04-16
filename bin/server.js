@@ -4,6 +4,7 @@ const port= process.env.PORT || 3000
 const server= http.createServer(app)
 const io = require('socket.io')(server)
 let player = []
+let gameOnStatus = false
 
 let data = [
     {
@@ -218,9 +219,19 @@ let data = [
 io.on('connection', function(socket) {
     console.log('User Connected')
     console.log(player)
+    socket.on('gameOn', () => {
+        if (!gameOnStatus) {
+            io.emit('gameOn', true)
+        }
+    })
     socket.on('user-connect', (user) => {
         player.push(user)
         console.log(player)
+        io.emit('stateNewPlayer', player)
+    })
+    socket.on('changeStatus', (data) => {
+        player = []
+        player = data
         io.emit('stateNewPlayer', player)
     })
 
