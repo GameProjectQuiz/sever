@@ -217,10 +217,11 @@ let data = [
 
 io.on('connection', function(socket) {
     console.log('User Connected')
-
+    console.log(player)
     socket.on('user-connect', (user) => {
         player.push(user)
         console.log(player)
+        io.emit('stateNewPlayer', player)
     })
 
     socket.on('disconnect', function() {
