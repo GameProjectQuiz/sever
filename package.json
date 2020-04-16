@@ -1,0 +1,30 @@
+{
+  "name": "sever",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon bin/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GameProjectQuiz/sever.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GameProjectQuiz/sever/issues"
+  },
+  "homepage": "https://github.com/GameProjectQuiz/sever#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.3",
+    "pg": "^8.0.2",
+    "sequelize": "^5.21.6",
+    "sequelize-cli": "^5.5.1",
+    "socket.io": "^2.3.0"
+  }
+}
