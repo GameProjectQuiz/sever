@@ -249,10 +249,8 @@ io.on('connection', function(socket) {
                     time-- 
                     if (time < 1) {
                         clearInterval(setInt)
-                        io.emit('startGame')
-    
+                        gameOn()
                     }
-                    console.log(time)
                     io.emit('startTimer', time)
             }, 1000)            
         }
@@ -271,5 +269,39 @@ io.on('connection', function(socket) {
     },10000) 
     
 })
+
+const gameOn = () => {
+    io.emit('startGame')
+    let timeGame = 100
+    // data.forEach(el => {
+        // emit data soal
+        let indexSoal = 0
+        // emit soal data
+        let gameInt =  setInterval(() => {
+            if (timeGame < 1) {
+                indexSoal++
+                if (indexSoal >= data.length) {
+                    clearInterval(gameInt)
+                } else {
+
+                    // emit data index+1
+                    // emit biar dia buka page result
+                    timeGame = 160
+                }
+                
+            }
+            // on dia udh jawab
+
+            // if (timeGame == 100 ) {
+            //     // io emmit balik ke laman game yg baru
+            // }
+            io.emit('startTimer', timeGame)
+            timeGame -= 10
+            console.log(timeGame)
+        }, 1000)
+        timeGame = 100
+    // })
+
+}
 
 server.listen(port,()=> console.log(`Listening on port ${port}`))
