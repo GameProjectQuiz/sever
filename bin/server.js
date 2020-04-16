@@ -98,125 +98,11 @@ let data = [
             }
         ],
         "answer": "Semua jawaban benar"
-    },
-    {
-        "id":5,
-        "question": "Manakah diantara pilihan berikut yang benar untuk 'Dua kosong dua empat'?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "2024"
-            },
-            {
-                "id": "B",
-                "choice": "0044"
-            },
-            {
-                "id": "C",
-                "choice": "0024"
-            },
-            {
-                "id": "D",
-                "choice": "2044"
-            }
-        ],
-        "answer": "0044"
-    },
-    {
-        "id":6,
-        "question": "Selalu potong rambut tiap hari tapi tak pernah botak?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Pakai ramuan penumbuh"
-            },
-            {
-                "id": "B",
-                "choice": "Rambutnya banyak"
-            },
-            {
-                "id": "C",
-                "choice": "Rambutnya tumbuh terus"
-            },
-            {
-                "id": "D",
-                "choice": "Tukang potong rambut"
-            }
-        ],
-        "answer": "Tukang potong rambut"
-    },
-    {
-        "id":7,
-        "question": "Kenapa bebek goreng rasanya enak?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Dagingnya lembut"
-            },
-            {
-                "id": "B",
-                "choice": "Harganya mahal"
-            },
-            {
-                "id": "C",
-                "choice": "Ada huruf B nya"
-            },
-            {
-                "id": "D",
-                "choice": "Dagingnya banyak"
-            }
-        ],
-        "answer": "Ada huruf B nya"
-    },
-    {
-        "id":8,
-        "question": "Tahu-tahu apa yang paling besar di Indonesia?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Tahu jumbo"
-            },
-            {
-                "id": "B",
-                "choice": "Tahu sutra"
-            },
-            {
-                "id": "C",
-                "choice": "Tahu isi sumedang"
-            },
-            {
-                "id": "D",
-                "choice": "Tahu ah gelap"
-            }
-        ],
-        "answer": "Tahu isi sumedang"
-    },
-    {
-        "id":9,
-        "question": "Berapakah total uang yang diperlukan untuk membeli kuota untuk online class hacktiv8 ?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Rp 50.000"
-            },
-            {
-                "id": "B",
-                "choice": "Rp 100.000"
-            },
-            {
-                "id": "C",
-                "choice": "Rp 150.000"
-            },
-            {
-                "id": "D",
-                "choice": "udah lebih dari semua pilihan :("
-            }
-        ],
-        "answer": "udah lebih dari semua pilihan :("
     }
 ]
 
 let setInt
+let scoreAll = []
 
 io.on('connection', function(socket) {
     console.log('User Connected')
@@ -231,6 +117,10 @@ io.on('connection', function(socket) {
         console.log(player)
         io.emit('stateNewPlayer', player)
         clearInterval(setInt)
+    })
+    socket.on('answer', (data) => {
+        scoreAll.push(data)
+        console.log(scoreAll)
     })
     socket.on('changeStatus', (data) => {
         player = []
@@ -249,7 +139,7 @@ io.on('connection', function(socket) {
                     time-- 
                     if (time < 1) {
                         clearInterval(setInt)
-                        gameOn()
+                        gameOn(socket)
                     }
                     io.emit('startTimer', time)
             }, 1000)            
@@ -270,7 +160,7 @@ io.on('connection', function(socket) {
     
 })
 
-const gameOn = () => {
+const gameOn = (socket) => {
     io.emit('startGame')
     let timeGame = 100
     // data.forEach(el => {
@@ -279,12 +169,17 @@ const gameOn = () => {
         io.emit('send-data',data[indexSoal])
         console.log(data[indexSoal], '<<<<<')
         // emit soal data
+        
         let gameInt =  setInterval(() => {
             if (timeGame < 1) {
                 indexSoal++
                 if (indexSoal >= data.length) {
                     clearInterval(gameInt)
                 } else {
+                    console.log(indexSoal)
+                    resultPerQuest(data[indexSoal-1].id)
+                    console.log(player)
+                    io.emit('resultCurrent', player)
                     io.emit('send-data',data[indexSoal])
                     // emit data index+1
                     // emit biar dia buka page result
@@ -292,6 +187,7 @@ const gameOn = () => {
                 }
                 
             }
+            
             // on dia udh jawab
 
             // if (timeGame == 100 ) {
@@ -303,6 +199,44 @@ const gameOn = () => {
         }, 1000)
         timeGame = 100
     // })
+
+}
+let arrayScoreResult = []
+
+const resultPerQuest = (questId) => {
+    scoreAll.forEach(el => {
+        let dataRet
+        if (el.questId == questId) {
+            data.forEach(el2 => {
+                if (el2.id == el.questId) {
+                    if (el2.answer == el.choice) {
+                        dataRet = {
+                            id: el.id,
+                            questId: el.questId,
+                            scoreQuest: el.time
+                        }
+                    } else {
+                        dataRet = {
+                            id: el.id,
+                            questId: el.questId,
+                            scoreQuest: 0
+                        }
+                    }
+                    return
+                }
+            })
+            arrayScoreResult.push(dataRet)
+        }
+    })
+    console.log(scoreAll)
+    console.log(arrayScoreResult)
+    player.forEach(el => {
+        arrayScoreResult.forEach(el2 => {
+            if (el2.id == el.id && el2.questId == questId) {
+                el.score += el2.scoreQuest
+            }
+        })
+    })
 
 }
 
