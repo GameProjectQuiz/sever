@@ -216,6 +216,8 @@ let data = [
     }
 ]
 
+let setInt
+
 io.on('connection', function(socket) {
     console.log('User Connected')
     console.log(player)
@@ -225,25 +227,48 @@ io.on('connection', function(socket) {
         }
     })
     socket.on('user-connect', (user) => {
-        player.push(user)
+        player.push(user) 
         console.log(player)
         io.emit('stateNewPlayer', player)
+        clearInterval(setInt)
     })
     socket.on('changeStatus', (data) => {
         player = []
         player = data
+        let statusNow = true
+        player.forEach(el => {
+            if (el.status == 'Waiting') {
+                statusNow = false
+                clearInterval(setInt)
+                return 
+            }
+        })
+        if (statusNow) {
+            let time = 10
+                setInt = setInterval(() => {
+                    time-- 
+                    if (time < 1) {
+                        clearInterval(setInt)
+                        io.emit('startGame')
+    
+                    }
+                    console.log(time)
+                    io.emit('startTimer', time)
+            }, 1000)            
+        }
+        
         io.emit('stateNewPlayer', player)
     })
 
     socket.on('disconnect', function() {
-        console.log('User Disconnected')
+        console.log('User Disconnected')  
     })
 
     setTimeout(function() {
         for(let i = 0; i < data.length; i++) {
             io.emit('send-data',data[i])
         }
-    },10000)
+    },10000) 
     
 })
 
