@@ -285,7 +285,7 @@ const gameOn = () => {
                 if (indexSoal >= data.length) {
                     clearInterval(gameInt)
                 } else {
-
+                    io.emit('send-data',data[indexSoal])
                     // emit data index+1
                     // emit biar dia buka page result
                     timeGame = 160
