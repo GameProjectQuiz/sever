@@ -276,6 +276,8 @@ const gameOn = () => {
     // data.forEach(el => {
         // emit data soal
         let indexSoal = 0
+        io.emit('send-data',data[indexSoal])
+        console.log(data[indexSoal], '<<<<<')
         // emit soal data
         let gameInt =  setInterval(() => {
             if (timeGame < 1) {
