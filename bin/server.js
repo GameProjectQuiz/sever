@@ -5,101 +5,11 @@ const server= http.createServer(app)
 const io = require('socket.io')(server)
 let player = []
 let gameOnStatus = false
+const fs= require('fs')
 
-let data = [
-    {
-        "id":1,
-        "question": "Lampu apa yang kalo dipecahkan akan keluar orang?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Lampu ajaib"
-            },
-            {
-                "id": "B",
-                "choice": "Lampu jin"
-            },
-            {
-                "id": "C",
-                "choice": "Lampu bohlam"
-            },
-            {
-                "id": "D",
-                "choice": "Lampu tetangga"
-            }
-        ],
-        "answer": "Lampu tetangga"
-    },
-    {
-        "id":2,
-        "question": "Jika umur kaka sekarang 4 tahun maka umur adik setengah umur kaka, jika umur kaka sekarang 100 tahun. Berapakah umur adik?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "49"
-            },
-            {
-                "id": "B",
-                "choice": "50"
-            },
-            {
-                "id": "C",
-                "choice": "98"
-            },
-            {
-                "id": "D",
-                "choice": "Tidak ada yang benar"
-            }
-        ],
-        "answer": "98"
-    },
-    {
-        "id":3,
-        "question": "Apa yang harus dilakukan ketika pacar pms?",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Ajak shopping"
-            },
-            {
-                "id": "B",
-                "choice": "Duet minum kiranti"
-            },
-            {
-                "id": "C",
-                "choice": "Ajak berkembangbiak"
-            },
-            {
-                "id": "D",
-                "choice": "Pura pura mati aja gais!"
-            }
-        ],
-        "answer": "Pura pura mati aja gais!"
-    },
-    {
-        "id":4,
-        "question": "Manakah diantara berikut ini yang merupakan bangunan 'bersejarah'",
-        "choices": [
-            {
-                "id": "A",
-                "choice": "Taj Mahal"
-            },
-            {
-                "id": "B",
-                "choice": "Rumah Mantan"
-            },
-            {
-                "id": "C",
-                "choice": "Colosseum"
-            },
-            {
-                "id": "D",
-                "choice": "Semua jawaban benar"
-            }
-        ],
-        "answer": "Semua jawaban benar"
-    }
-]
+let resource= fs.readFileSync('./resource.json')
+let data = JSON.parse(resource)
+console.log(data)
 
 let setInt
 let scoreAll = []
