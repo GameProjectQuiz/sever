@@ -86,10 +86,12 @@ const gameOn = (socket) => {
                     player.sort(function(a, b) {
                         return b.score - a.score;
                     });
+                    scoreAll = []
+                    io.emit('finalScore', player)
+                    player = []
+                    io.emit('finished', true)
                     console.log(player, 'hasil nih')
                     gameOnStatus = false
-                    player = []
-                    scoreAll = []
                 } else {
                     console.log(indexSoal)
                     resultPerQuest(data[indexSoal-1].id)
