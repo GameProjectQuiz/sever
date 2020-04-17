@@ -55,7 +55,6 @@ io.on('connection', function(socket) {
                     io.emit('startTimer', time)
             }, 1000)            
         }
-        
         io.emit('stateNewPlayer', player)
     })
 
@@ -99,7 +98,7 @@ const gameOn = (socket) => {
                     console.log(player, 'ini ternyata')
                     io.emit('resultCurrent', player)
                     io.emit('send-data',data[indexSoal])
-                    timeGame = 160
+                    timeGame = 110
                 }                
             }            
             io.emit('startTimer', timeGame)
