@@ -17,8 +17,10 @@ io.on('connection', function(socket) {
     console.log('User Connected')
     console.log(player)
     socket.on('gameOn', () => {
-        if (!gameOnStatus) {
+        if (gameOnStatus) {
             io.emit('gameOn', true)
+        } else {
+            io.emit('gameOn', false)
         }
     })
     socket.on('user-connect', (user) => {
@@ -70,6 +72,7 @@ io.on('connection', function(socket) {
 })
 
 const gameOn = (socket) => {
+    gameOnStatus = true
     io.emit('startGame')
     let timeGame = 100
     // data.forEach(el => {
@@ -86,6 +89,9 @@ const gameOn = (socket) => {
                     clearInterval(gameInt)
                     resultPerQuest(data[indexSoal-1].id)
                     console.log(player, 'hasil nih')
+                    gameOnStatus = false
+                    player = []
+                    scoreAll = []
                     // emit buat ganti ke page score
                     // io.emit('finalScorePage')
 
