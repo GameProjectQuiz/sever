@@ -83,11 +83,14 @@ const gameOn = (socket) => {
         // emit soal data
         
         let gameInt =  setInterval(() => {
-            if (timeGame < 1) {
+            if (timeGame <= 0) {
                 indexSoal++
                 if (indexSoal >= data.length) {
                     clearInterval(gameInt)
                     resultPerQuest(data[indexSoal-1].id)
+                    player.sort(function(a, b) {
+                        return b.score - a.score;
+                    });
                     console.log(player, 'hasil nih')
                     gameOnStatus = false
                     player = []
