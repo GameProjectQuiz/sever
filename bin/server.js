@@ -23,6 +23,10 @@ io.on('connection', function(socket) {
             io.emit('gameOn', false)
         }
     })
+    socket.on('clear-all-client', () => {
+        console.log('ini clear all')
+        io.emit('clear-all-client')
+    })
     socket.on('user-connect', (user) => {
         player.push(user) 
         console.log(player)
@@ -109,7 +113,7 @@ const gameOn = (socket) => {
 }
 let arrayScoreResult = []
 
-const resultPerQuest = (questId) => {
+const resultPerQuest = (questId) => { 
     scoreAll.forEach(el => {
         let dataRet
         if (el.questId == questId) {
@@ -145,5 +149,6 @@ const resultPerQuest = (questId) => {
     })
 
 }
+console.log(player)
 
 server.listen(port,()=> console.log(`Listening on port ${port}`))
