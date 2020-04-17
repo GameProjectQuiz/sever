@@ -9,7 +9,6 @@ const fs= require('fs')
 
 let resource= fs.readFileSync('./resource.json')
 let data = JSON.parse(resource)
-console.log(data)
 
 let setInt
 let scoreAll = []
@@ -85,10 +84,17 @@ const gameOn = (socket) => {
                 indexSoal++
                 if (indexSoal >= data.length) {
                     clearInterval(gameInt)
+                    resultPerQuest(data[indexSoal-1].id)
+                    console.log(player, 'hasil nih')
+                    // emit buat ganti ke page score
+                    // io.emit('finalScorePage')
+
+                    // emit score hasil
+                    // io.emit('finalScore', player)
                 } else {
                     console.log(indexSoal)
                     resultPerQuest(data[indexSoal-1].id)
-                    console.log(player)
+                    console.log(player, 'ini ternyata')
                     io.emit('resultCurrent', player)
                     io.emit('send-data',data[indexSoal])
                     // emit data index+1
@@ -138,8 +144,8 @@ const resultPerQuest = (questId) => {
             arrayScoreResult.push(dataRet)
         }
     })
-    console.log(scoreAll)
-    console.log(arrayScoreResult)
+    console.log(scoreAll, 'SCOREALL')
+    console.log(arrayScoreResult, '<<<<<<<')
     player.forEach(el => {
         arrayScoreResult.forEach(el2 => {
             if (el2.id == el.id && el2.questId == questId) {
