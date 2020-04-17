@@ -83,6 +83,8 @@ const gameOn = (socket) => {
                 indexSoal++
                 if (indexSoal >= data.length) {
                     clearInterval(gameInt)
+                    io.emit('finalScore', player)
+                    io.emit('finished', true)
                     resultPerQuest(data[indexSoal-1].id)
                     player.sort(function(a, b) {
                         return b.score - a.score;
