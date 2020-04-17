@@ -75,53 +75,36 @@ const gameOn = (socket) => {
     gameOnStatus = true
     io.emit('startGame')
     let timeGame = 100
-    // data.forEach(el => {
-        // emit data soal
         let indexSoal = 0
         io.emit('send-data',data[indexSoal])
         console.log(data[indexSoal], '<<<<<')
-        // emit soal data
-        
         let gameInt =  setInterval(() => {
-            if (timeGame < 1) {
+            if (timeGame <= 0) {
                 indexSoal++
                 if (indexSoal >= data.length) {
                     clearInterval(gameInt)
                     resultPerQuest(data[indexSoal-1].id)
+                    player.sort(function(a, b) {
+                        return b.score - a.score;
+                    });
                     console.log(player, 'hasil nih')
                     gameOnStatus = false
                     player = []
                     scoreAll = []
-                    // emit buat ganti ke page score
-                    // io.emit('finalScorePage')
-
-                    // emit score hasil
-                    // io.emit('finalScore', player)
                 } else {
                     console.log(indexSoal)
                     resultPerQuest(data[indexSoal-1].id)
                     console.log(player, 'ini ternyata')
                     io.emit('resultCurrent', player)
                     io.emit('send-data',data[indexSoal])
-                    // emit data index+1
-                    // emit biar dia buka page result
                     timeGame = 160
-                }
-                
-            }
-            
-            // on dia udh jawab
-
-            // if (timeGame == 100 ) {
-            //     // io emmit balik ke laman game yg baru
-            // }
+                }                
+            }            
             io.emit('startTimer', timeGame)
             timeGame -= 10
             console.log(timeGame)
         }, 1000)
         timeGame = 100
-    // })
-
 }
 let arrayScoreResult = []
 
